@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+    </style>
+</head>
+
+<body>
+
+    <div id="root">
+        <task-list></task-list>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+
+    <script>
+        Vue.component('task-list', {
+            template: '<div><task v-for="task in tasks">{{ task.task }}</task></div>',
+            data() {
+                return {
+                    tasks: [
+                        { task: 'Go to store', complete: true },
+                        { task: 'Go to gym', complete: false },
+                        { task: 'Go to library', complete: true },
+                        { task: 'Go to bed', complete: false }
+                    ]
+                };
+            }
+        });
+
+        Vue.component('task', {
+            template: '<li><slot></slot></li>'
+        });
+
+        new Vue({
+            el: '#root'
+        });
+    </script>
+
+</body>
+
+</html>

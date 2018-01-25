@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .is-loading{
+                background-color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="basics">
+
+            <h1>
+                {{ message }} - {{ reversedTitle }}
+            </h1>
+
+            <ul>
+                <li v-for="name in names" v-text="name"></li>
+            </ul>
+
+            <input id="input" type="text" v-model="newName">
+
+            <!-- @ = short hand for v-on: -->
+            <button @click="addName">Add name</button>
+
+            <!-- : = short hand for v-bind: -->
+            <button @click="toggleClass" :title="buttonTitle" :class="{ 'is-loading': isLoading }">Toggle me</button>
+        
+        </div>
+
+        <div id="tasks">
+            <h1>Tasks</h1>
+
+            <h2>All tasks</h2>
+
+            <ul>
+                <li v-for="task in tasks">
+                    {{ task.description }}
+                </li>
+            </ul>
+
+            <h2>Complete tasks</h2>
+
+            <ul>
+                <li v-for="task in completeTasks">
+                    {{ task.description }}
+                    <input type="checkbox" v-model="task.complete">
+                </li>
+            </ul>
+
+            <h2>Incomplete tasks</h2>
+
+            <ul>
+                <li v-for="task in incompleteTasks">
+                    {{ task.description }}
+                    <input type="checkbox" v-model="task.complete">
+                </li>
+            </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+
+        <script>
+            new Vue({
+                el: '#basics',
+                data: {
+                    message: 'Vue 2 basics',
+                    newName: '',
+                    names: ['Joe', 'Jeff', 'Johno', 'James'],
+                    buttonTitle: 'Add a new name',
+                    className: 'red',
+                    isLoading: false
+                },
+                methods: {
+                    // Short hand func
+                    addName(){
+                        this.names.push(this.newName);
+                        this.newName = '';
+                    },
+                    // Equivavlent func
+                    toggleClass: function(){
+                        this.isLoading = !this.isLoading;
+                    }
+                },
+
+                computed: {
+                    reversedTitle(){
+                        return this.message.split('').reverse().join('');
+                    }
+                }
+            });
+
+            new Vue({
+                el: '#tasks',
+                data: {
+                    tasks: [
+                        {id:1, description: 'Clean the cooker', complete: false},
+                        {id:2, description: 'Wash the car', complete: false},
+                        {id:3, description: 'Food shop', complete: true},
+                        {id:4, description: 'Money in bank', complete: false},
+                        {id:5, description: 'Hoover', complete: true},
+                    ]
+                },
+                //For any complex logic, you should use a computed property.
+                computed: {
+                      // The function we provided will be used as the getter function for the property incompleteTasks/completeTasks
+                    incompleteTasks(){
+                        return this.tasks.filter(task => !task.complete);
+                    },
+                    completeTasks(){
+                        return this.tasks.filter(task => task.complete);
+                    }
+                }
+            });
+
+            new Vue({
+                el: '#component'
+            });
+        </script>
+
+    </body>
+</html>
