@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css">
+    <style>
+        body {
+            margin: 2em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root" class="container">
+
+        <tabs>
+
+            <tab name="About us" :selected="true">
+                <p>About us tab content goes here.</p>
+            </tab>
+
+            <tab name="About our culture">
+                <p>About our culture tab content goes here.</p>
+            </tab>
+
+            <tab name="About our vision">
+                <p>About our vision tab content goes here.</p>
+            </tab>
+
+        </tabs>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+
+    <script>
+        Vue.component('tabs', {
+            template: `
+            <div>
+            <div class="tabs">
+                <ul>
+                    <li v-for="tab in tabs" :class="{ 'is-active': tab.isActive }">
+                        <a :href="tab.href" @click="selectTab(tab)">{{tab.name}}</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tabs-details">
+                <slot></slot>
+            </div>
+
+            </div>
+            `,
+            data() {
+                return { tabs: [] };
+            },
+
+            created() {
+                this.tabs = this.$children;
+            },
+            methods: {
+                selectTab(selectedTab) {
+                    this.tabs.forEach(tab => {
+                        tab.isActive = (tab.name == selectedTab.name)
+                    });
+                }
+            }
+        });
+
+        Vue.component('tab', {
+            props: {
+                name: { required: true },
+                selected: { default: false }
+            },
+            template: `
+                <div v-show="isActive"><slot></slot></div>
+            `,
+            data() {
+                return {
+                    isActive: false
+                };
+            },
+
+            computed: {
+                href() {
+                    return '#' + this.name.toLowerCase().replace(/ /g, '-');
+                }
+            },
+
+            mounted() {
+                isActive = this.selected;
+            }
+        });
+
+
+        new Vue({
+            el: '#root'
+        });
+    </script>
+
+</body>
+
+</html>
